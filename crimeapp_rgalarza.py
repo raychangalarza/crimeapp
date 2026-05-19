@@ -22,12 +22,14 @@ area_policiaca = st.sidebar.selectbox(
 
 delitos = st.sidebar.multiselect(
   "Delitos",
-  df["Crime"].unique().tolist()
+  df["Crime"].unique().tolist(),
+  default=df["Crime"].unique().tolist()
 )
 
 dow = st.sidebar.multiselect(
   "Día de la Semana",
-  df["DOW_Name"].unique().tolist()
+  df["DOW_Name"].unique().tolist(),
+  default=df["DOW_Name"].unique().tolist()
 )
 
 am_pm = st.sidebar.selectbox(
