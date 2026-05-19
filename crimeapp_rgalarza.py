@@ -14,8 +14,26 @@ def load_data(data):
 
 df = load_data("crime_processed.csv")
 
-area_policiaca = st.sidebar.selectbox("Area Policíaca", ["Todas las áreas"].extend(df["Area"].unique().tolist()))
+# Sidebar selectbox and multiselect
+area_policiaca = st.sidebar.selectbox(
+  "Area Policíaca", 
+  ["Todas las áreas", *df["Area Policiaca"].unique()]
+  )
 
+delitos = st.sidebar.multiselect(
+  "Delitos",
+  *df["Crime"].unique()
+)
+
+dow = st.sidebar.multiselect(
+  "Día de la Semana",
+  *df["DOW_Name"].unique()
+)
+
+am_pm = st.sidebar.selectbox(
+  "AM ó PM",
+  ["Ambas", "AM", "PM"]
+)
 
 def dameIndice(delito):
   if delito == "Asesinato":
@@ -39,4 +57,3 @@ def dameIndice(delito):
   else:
     return 4
   
-crimenes = df["Crime"].unique().tolist()
