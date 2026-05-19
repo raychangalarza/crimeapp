@@ -3,8 +3,9 @@ import streamlit as st
 import plotly.express as px
 
 # Title 
-st.logo("crimeapp_logo.png", size='large')
-st.title("Dashboard de Datos de Crímenes en Puerto Rico")
+st.title("Datos de Crímenes en Puerto Rico 2013-2016")
+st.write("Fuente de datos: Policía de Puerto Rico")
+st.divider()
 
 # Creating dataframe
 @st.cache_data
@@ -14,11 +15,17 @@ def load_data(data):
 
 df = load_data("crime_processed.csv")
 
+# Logo
+st.sidebar.image("crimeapp_logo.png")
+st.sidebar.divider()
+
 # Sidebar selectbox and multiselect
 area_policiaca = st.sidebar.selectbox(
   "Area Policíaca", 
   ["Todas las áreas", *df["Area"].unique()]
   )
+
+st.sidebar.divider()
 
 delitos = st.sidebar.multiselect(
   "Delitos",
@@ -26,16 +33,22 @@ delitos = st.sidebar.multiselect(
   default=df["Crime"].unique().tolist()
 )
 
+st.sidebar.divider()
+
 dow = st.sidebar.multiselect(
   "Día de la Semana",
   df["DOW_Name"].unique().tolist(),
   default=df["DOW_Name"].unique().tolist()
 )
 
+st.sidebar.divider()
+
 am_pm = st.sidebar.selectbox(
   "AM ó PM",
   ["Ambas", "AM", "PM"]
 )
+
+st.sidebar.divider()
 
 #Sidebar text
 st.sidebar.write("""
@@ -46,6 +59,7 @@ Ciencia de Datos\n
 Universidad de Puerto Rico en Humacao
 """)
 
+# Function for map graph
 def dameIndice(delito):
   if delito == "Asesinato":
     return 10
