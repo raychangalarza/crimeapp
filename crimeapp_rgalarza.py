@@ -82,6 +82,8 @@ def dameIndice(delito):
   else:
     return 4
   
+df.columns = ["Fecha", "Horario", "CrimeCode", "Delito", "Lat", "Lon", "Area", "Año", "Mes", "nombreMes", "Dia", "Dia_Samana", "nombreDiaSemana", "DiaAño", "Hora", "Min"]
+
 centro_zoom = dict(lat=18.25178, lon=-66.254513)
   
 mapa_puntos = px.scatter_map(df, lat="Lat", lon="Lon", color="indiceGravedad", size="indiceGravedad", size_max=5, 
