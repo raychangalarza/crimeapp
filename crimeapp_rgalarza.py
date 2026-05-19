@@ -17,7 +17,7 @@ df = load_data("crime_processed.csv")
 # Sidebar selectbox and multiselect
 area_policiaca = st.sidebar.selectbox(
   "Area Policíaca", 
-  ["Todas las áreas", *df["Area Policiaca"].unique()]
+  ["Todas las áreas", *df["Area"].unique()]
   )
 
 delitos = st.sidebar.multiselect(
