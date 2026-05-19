@@ -37,6 +37,15 @@ am_pm = st.sidebar.selectbox(
   ["Ambas", "AM", "PM"]
 )
 
+#Sidebar text
+st.sidebar.write("""
+Aplicación desarrollada por:\n
+Raychan J. Galarza Rodríguez\n
+Proyecto Final Comp3082 – Mayo 2026\n
+Ciencia de Datos\n              
+Universidad de Puerto Rico en Humacao
+""")
+
 def dameIndice(delito):
   if delito == "Asesinato":
     return 10
