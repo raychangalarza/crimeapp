@@ -14,7 +14,7 @@ def load_data(data):
 
 df = load_data("crime_processed.csv")
 
-area_policiaca = st.sidebar.selectbox("Area Policíaca", ["Todas las áreas"].extend(df["Area"].unique()))
+area_policiaca = st.sidebar.selectbox("Area Policíaca", ["Todas las áreas"].extend(df["Area"].unique().tolist()))
 
 
 def dameIndice(delito):
