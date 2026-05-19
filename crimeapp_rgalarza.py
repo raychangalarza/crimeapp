@@ -82,3 +82,13 @@ def dameIndice(delito):
   else:
     return 4
   
+centro_zoom = dict(lat=18.25178, lon=-66.254513)
+  
+mapa_puntos = px.scatter_map(df, lat="Lat", lon="Lon", color="indiceGravedad", size="indiceGravedad", size_max=5, 
+                             color_continuous_scale=px.colors.sequential.Hot_r,  height=800, zoom=9, center=centro_zoom, 
+                             map_style="carto-darkmatter-nolabels", opacity=0.3)
+
+st.plotly_chart(mapa_puntos)
+
+st.divider()
+
