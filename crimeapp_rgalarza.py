@@ -3,7 +3,7 @@ import streamlit as st
 import plotly.express as px
 
 # Title 
-st.logo("crimeapp_logo.png")
+st.logo("crimeapp_logo.png", size='large')
 st.title("Dashboard de Datos de Crímenes en Puerto Rico")
 
 # Creating dataframe
