@@ -15,15 +15,16 @@ def load_data(data):
     return df
 
 df = load_data("crime_processed.csv")
+df.columns = ["Fecha", "Horario", "CrimeCode", "Delito", "Lat", "Lon", "Area", "Año", "Mes", "nombreMes", "Dia", "Dia_Semana", "nombreDiaSemana", "DiaAño", "Hora", "Min"]
 
 # Traduccion de los dias
-dias = {"Domingo":  "Sunday",
-        "Lunes": "Monday",
-        "Martes": "Tuesday",
-        "Miércoles": "Wednesday",
-        "Jueves": "Thursday",
-        "Viernes": "Friday",
-        "Sábado": "Saturday"}
+df.replace({"Sunday":  "Domingo",
+        "Monday": "Lunes",
+        "Tuesday": "Martes",
+        "Wednesday": "Miércoles",
+        "Thursday": "Jueves",
+        "Friday": "Viernes",
+        "Saturday": "Sábado"})
 
 # Logo
 st.sidebar.image("crimeapp_logo.png")
@@ -44,11 +45,11 @@ delitos = st.sidebar.multiselect(
 )
 
 st.sidebar.divider()
-
-dow = st.sidebar.multiselect(
+dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]
+dow = st.sidebar.multiselect( 
   "Día de la Semana",
-  list(dias),
-  default=list(dias)
+  dias,
+  default=dias
 )
 
 st.sidebar.divider()
@@ -77,7 +78,7 @@ df = df[df["Crime"].isin(delitos)]
 df = df[df["DOW_Name"].isin(list(dias.values()))]
 
 # Own column for classification between am and pm hours
-df["AM_PM"] = df["Hour"].apply(lambda x: "AM" if x < 12 else "PM") # Experimentndo con lambda
+df["AM_PM"] = df["Hora"].apply(lambda x: "AM" if x < 12 else "PM") # Experimentndo con lambda
 if am_pm != "Ambas":
     df = df[df["AM_PM"] == am_pm]
 
@@ -95,7 +96,7 @@ if df.empty:
 # Summary text at the top
 col1.metric("Cantidad de incidentes", f"{len(df):,}")
 
-mas_frecuencia = df["Crime"].value_counts().head(1).index[0]
+mas_frecuencia = df["Crimen"].value_counts().head(1).index[0]
 col2.metric("Delito más frecuente", mas_frecuencia)
 
 mas_incidentes = df["Area"].value_counts().head(1).index[0]
@@ -120,17 +121,17 @@ indice_gravedad = {
     "Apropiacion Ilegal": 5.0,
     "Otros":4.0
 }
-df["Gravedad"] = df["Crime"].map(indice_gravedad) #Usé esto en vez porque aunque, verdaderamente no sé si es así, me pareció más fácil  y quizás eficiente hacerlo fuera de otra función
+df["Gravedad"] = df["Crimen"].map(indice_gravedad) #Usé esto en vez porque aunque, verdaderamente no sé si es así, me pareció más fácil  y quizás eficiente hacerlo fuera de otra función
 
 # Map
 centro_zoom = dict(lat=18.25178, lon=-66.254513)
 mapa_puntos = px.scatter_map(df, lat="Lat", lon="Lon", color="Gravedad", size="Gravedad", size_max=5, 
                              color_continuous_scale=px.colors.sequential.Hot_r,  height=CHART_HEIGHT, zoom=7.5, center=centro_zoom, 
-                             map_style="carto-darkmatter-nolabels", opacity=0.3, hover_data={
-                                 "Crime": True,
+                             map_style="carto-darkmatter-nolabels", opacity=0.3, hover_name = "Area", hover_data={
+                                 "Crimen": True,
                                  "Fecha": True,
-                                 "Hora": True,
-                                 "DOW_Name": True,
+                                 "Horario": True,
+                                 "nombreDiaSemana": True,
                                  "Area": True,
                                  "Lat": False,
                                  "Lon": False,
@@ -139,7 +140,7 @@ mapa_puntos = px.scatter_map(df, lat="Lat", lon="Lon", color="Gravedad", size="G
 col1.plotly_chart(mapa_puntos, use_container_width=True)
 
 # Own dataframe for bar chart
-cant = df["Crime"].value_counts().reset_index()
+cant = df["Crimen"].value_counts().reset_index()
 cant.columns = ["Crimen", "Cantidad"]
 cant = cant.sort_values("Cantidad", ascending=True)
 # En el pdf dice histograma pero en el ejemplo es un bar, me hizo mas sentido como bar
