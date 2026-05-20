@@ -23,7 +23,7 @@ col1, col2, col3 = st.columns(3)
 
 col1.metric("Cantidad de incidentes", len(df))
 
-frecuencia = df["Crime"].value_counts().head(1)
+frecuencia = df["Crime"].value_counts()
 
 col2.metric("Delito más frecuente", frecuencia)
 
