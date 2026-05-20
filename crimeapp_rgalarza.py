@@ -40,7 +40,7 @@ st.sidebar.divider()
 
 delitos = st.sidebar.multiselect(
   "Delitos",
-  df["Crime"].unique().tolist(),
+  df["Crimen"].unique().tolist(),
   default=df["Crimen"].unique().tolist()
 )
 
