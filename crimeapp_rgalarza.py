@@ -115,13 +115,14 @@ centro_zoom = dict(lat=18.25178, lon=-66.254513)
 mapa_puntos = px.scatter_map(df, lat="Lat", lon="Lon", color="Gravedad", size="Gravedad", size_max=5, 
                              color_continuous_scale=px.colors.sequential.Hot_r,  height=CHART_HEIGHT, zoom=7.5, center=centro_zoom, 
                              map_style="carto-darkmatter-nolabels", opacity=0.3, hover_data={
-                                 "Crime" = True,
-                                 "Fecha" = True,
-                                 "Hora" = True,
-                                 "DOW_Name" = True,
-                                 "Area" = True,
-                                 "Lat" = False,
-                                 "Lon" = False
+                                 "Crime": True,
+                                 "Fecha": True,
+                                 "Hora": True,
+                                 "DOW_Name": True,
+                                 "Area": True,
+                                 "Lat": False,
+                                 "Lon": False,
+                                 "Gravedad": False
                              })
 col1.plotly_chart(mapa_puntos, use_container_width=True)
 
