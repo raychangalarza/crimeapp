@@ -20,6 +20,7 @@ df = load_data("crime_processed.csv")
 st.sidebar.image("crimeapp_logo.png")
 st.sidebar.divider()
 
+# Text with summarized metrics
 col1, col2, col3 = st.columns(3)
 
 col1.metric("Cantidad de incidentes", f"{len(df):,}")
@@ -30,6 +31,32 @@ col2.metric("Delito más frecuente", mas_frecuencia)
 mas_incidentes = df["Area"].value_counts().head(1).index[0]
 col3.metric("Área con mas incidentes", mas_incidentes)
 
+st.divider()
+
+# Map and chart
+col1, col2 = st.columns(2, border=True)
+
+# Map bubble colors
+indice_gravedad = {
+    "Asesinato": 10,
+    "Violacion": 9.5,
+    "Trata Humana": 9.0,
+    "Incendio Malicioso": 8.5,
+    "Agresion Agravada": 8.0,
+    "Robo": 7.0,
+    "Escalamiento": 6.0,
+    "Vehiculo Hurtado": 5.5,
+    "Apropiacion Ilegal": 5.0,
+    "Otros":4.0
+}
+df["indiceGravedad"].map(indice_gravedad)
+
+centro_zoom = dict(lat=18.25178, lon=-66.254513)
+mapa_puntos = px.scatter_map(df, lat="Lat", lon="Lon", color="indiceGravedad", size="indiceGravedad", size_max=5, color_continuous_scale=px.colors.sequential.Hot_r,  height=800, zoom=9, center=centro_zoom, map_style="carto-darkmatter-nolabels", opacity=0.3)
+col1.plotly_chart = (mapa_puntos)
+
+df["Cantidad"] = df["Crime"].value_counts()
+distribucion_del = px.bar(data_frame=df, x="Cantidad", y="Crime")
 
 # Sidebar selectbox and multiselect
 area_policiaca = st.sidebar.selectbox(
@@ -70,26 +97,3 @@ Proyecto Final Comp3082 – Mayo 2026\n
 Ciencia de Datos\n              
 Universidad de Puerto Rico en Humacao
 """)
-
-# Function for map graph
-def dameIndice(delito):
-  if delito == "Asesinato":
-    return 10
-  elif delito == "Violacion":
-    return 9.5
-  elif delito == "Trata Humana":
-    return 9.0
-  elif delito == "Incendio Malicioso":
-    return 8.5
-  elif delito == "Agresion Agravada":
-    return 8.0
-  elif delito == "Robo":
-    return 7.0
-  elif delito == "Escalamiento":
-    return 6.0
-  elif delito == "Vehiculo Hurtado":
-    return 5.5
-  elif delito == "Apropiacion Ilegal":
-    return 5.0
-  else:
-    return 4
