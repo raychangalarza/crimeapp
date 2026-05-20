@@ -52,13 +52,15 @@ indice_gravedad = {
 df["indiceGravedad"] = df["Crime"].map(indice_gravedad)
 
 centro_zoom = dict(lat=18.25178, lon=-66.254513)
-mapa_puntos = px.scatter_map(df, lat="Lat", lon="Lon", color="indiceGravedad", size="indiceGravedad", size_max=5, color_continuous_scale=px.colors.sequential.Hot_r,  height=800, zoom=9, center=centro_zoom, map_style="carto-darkmatter-nolabels", opacity=0.3)
-col1.plotly_chart(mapa_puntos)
+mapa_puntos = px.scatter_map(df, lat="Lat", lon="Lon", color="indiceGravedad", size="indiceGravedad", size_max=5, 
+                             color_continuous_scale=px.colors.sequential.Hot_r,  height=400, zoom=9, center=centro_zoom, 
+                             map_style="carto-darkmatter-nolabels", opacity=0.3)
+col1.plotly_chart(mapa_puntos, use_container_width=True)
 
 cant = df["Crime"].value_counts().reset_index()
-cant.columns = ["Crime", "Cantidad"]
+cant.columns = ["Crimen", "Cantidad"]
 
-distribucion_del = px.bar(cant, x="Cantidad", y="Crime")
+distribucion_del = px.bar(cant, x="Cantidad", y="Crimen")
 col2.plotly_chart(distribucion_del)
 
 # Sidebar selectbox and multiselect
