@@ -34,7 +34,7 @@ col3.metric("Área con mas incidentes", mas_incidentes)
 st.divider()
 
 # Map and chart
-col1, col2 = st.columns(2, border=True)
+col1, col2 = st.columns([1.5, 1.0], border=True)
 
 # Map bubble colors
 indice_gravedad = {
@@ -49,11 +49,11 @@ indice_gravedad = {
     "Apropiacion Ilegal": 5.0,
     "Otros":4.0
 }
-df["indiceGravedad"] = df["Crime"].map(indice_gravedad)
+df["Gravedad"] = df["Crime"].map(indice_gravedad)
 
 centro_zoom = dict(lat=18.25178, lon=-66.254513)
-mapa_puntos = px.scatter_map(df, lat="Lat", lon="Lon", color="indiceGravedad", size="indiceGravedad", size_max=5, 
-                             color_continuous_scale=px.colors.sequential.Hot_r,  height=400, zoom=9, center=centro_zoom, 
+mapa_puntos = px.scatter_map(df, lat="Lat", lon="Lon", color="Gravedad", size="Gravedad", size_max=5, 
+                             color_continuous_scale=px.colors.sequential.Hot_r,  height=450, zoom=8, center=centro_zoom, 
                              map_style="carto-darkmatter-nolabels", opacity=0.3)
 col1.plotly_chart(mapa_puntos, use_container_width=True)
 
