@@ -16,6 +16,15 @@ def load_data(data):
 
 df = load_data("crime_processed.csv")
 
+# Traduccion de los dias
+dias = {"Domingo":  "Sunday",
+        "Lunes": "Monday",
+        "Martes": "Tuesday",
+        "Miércoles": "Wednesday",
+        "Jueves": "Thursday",
+        "Viernes": "Friday",
+        "Sábado": "Saturday"}
+
 # Logo
 st.sidebar.image("crimeapp_logo.png")
 st.sidebar.divider()
@@ -60,13 +69,15 @@ Ciencia de Datos\n
 Universidad de Puerto Rico en Humacao
 """)
 
+# Filters dataframe according to sidebar filters
 if area_policiaca != "Todas las áreas":
     df = df[df["Area"] == area_policiaca]
 
 df = df[df["Crime"].isin(delitos)]
 df = df[df["DOW_Name"].isin(dow)]
 
-df["AM_PM"] = df["Hour"].apply(lambda x: "AM" if x < 12 else "PM")
+# Own column for classification between am and pm hours
+df["AM_PM"] = df["Hour"].apply(lambda x: "AM" if x < 12 else "PM") # Experimentndo con lambda
 if am_pm != "Ambas":
     df = df[df["AM_PM"] == am_pm]
 
@@ -75,13 +86,13 @@ col1, col2, col3 = st.columns(3)
 
 # If empty, show a warning and stop
 if df.empty:
-    col1, col2, col3 = st.columns(3)
     col1.metric("Cantidad de incidentes", 0)
     col2.metric("Delito más frecuente", "N/A")
-    col3.metric("Área con mas incidentes", "N/A")
+    col3.metric("Área con más incidentes", "N/A")
     st.warning("No hay datos con los filtros seleccionados.")
     st.stop()
 
+# Summary text at the top
 col1.metric("Cantidad de incidentes", f"{len(df):,}")
 
 mas_frecuencia = df["Crime"].value_counts().head(1).index[0]
@@ -94,7 +105,7 @@ st.divider()
 
 # Map and chart
 col1, col2 = st.columns([1.3, 1.2], border=True)
-
+#Same height for both charts
 CHART_HEIGHT = 500
 # Map bubble colors
 indice_gravedad = {
@@ -109,8 +120,9 @@ indice_gravedad = {
     "Apropiacion Ilegal": 5.0,
     "Otros":4.0
 }
-df["Gravedad"] = df["Crime"].map(indice_gravedad)
+df["Gravedad"] = df["Crime"].map(indice_gravedad) #Usé esto en vez porque aunque, verdaderamente no sé si es así, me pareció más fácil  y quizás eficiente hacerlo fuera de otra función
 
+# Map
 centro_zoom = dict(lat=18.25178, lon=-66.254513)
 mapa_puntos = px.scatter_map(df, lat="Lat", lon="Lon", color="Gravedad", size="Gravedad", size_max=5, 
                              color_continuous_scale=px.colors.sequential.Hot_r,  height=CHART_HEIGHT, zoom=7.5, center=centro_zoom, 
@@ -126,9 +138,10 @@ mapa_puntos = px.scatter_map(df, lat="Lat", lon="Lon", color="Gravedad", size="G
                              })
 col1.plotly_chart(mapa_puntos, use_container_width=True)
 
+# Own dataframe for bar chart
 cant = df["Crime"].value_counts().reset_index()
 cant.columns = ["Crimen", "Cantidad"]
 cant = cant.sort_values("Cantidad", ascending=True)
-
-distribucion_del = px.bar(cant, x="Cantidad", y="Crimen", height=CHART_HEIGHT, title="Distribución de Delitos\nÁrea Policiaca: Todas las áreas")
+# En el pdf dice histograma pero en el ejemplo es un bar, me hizo mas sentido como bar
+distribucion_del = px.bar(cant, x="Cantidad", y="Crimen", height=CHART_HEIGHT, title="Distribución de Delitos<br>Área Policiaca: Todas las áreas")
 col2.plotly_chart(distribucion_del, use_container_width=True)
