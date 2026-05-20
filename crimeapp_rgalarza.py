@@ -22,7 +22,7 @@ st.sidebar.divider()
 col1, col2, col3 = st.columns(3)
 
 col1.write("Cantidad de incidentes")
-col1.write(str(len(df)))
+col1.write(len(df))
 
 frecuencia = df["Crime"].count().max()
 col2.write("Delito más frecuente")
