@@ -72,14 +72,6 @@ if am_pm != "Ambas":
 # Text with summarized metrics
 col1, col2, col3 = st.columns(3)
 
-col1.metric("Cantidad de incidentes", f"{len(df):,}")
-
-mas_frecuencia = df["Crime"].value_counts().head(1).index[0]
-col2.metric("Delito más frecuente", mas_frecuencia)
-
-mas_incidentes = df["Area"].value_counts().head(1).index[0]
-col3.metric("Área con mas incidentes", mas_incidentes)
-
 # If empty, show a warning and stop
 if df.empty:
     col1, col2, col3 = st.columns(3)
@@ -89,10 +81,18 @@ if df.empty:
     st.warning("No hay datos con los filtros seleccionados.")
     st.stop()
 
+col1.metric("Cantidad de incidentes", f"{len(df):,}")
+
+mas_frecuencia = df["Crime"].value_counts().head(1).index[0]
+col2.metric("Delito más frecuente", mas_frecuencia)
+
+mas_incidentes = df["Area"].value_counts().head(1).index[0]
+col3.metric("Área con mas incidentes", mas_incidentes)
+
 st.divider()
 
 # Map and chart
-col1, col2 = st.columns([1.5, 1.0], border=True)
+col1, col2 = st.columns([1.3, 1.2], border=True)
 
 CHART_HEIGHT = 500
 # Map bubble colors
@@ -112,7 +112,7 @@ df["Gravedad"] = df["Crime"].map(indice_gravedad)
 
 centro_zoom = dict(lat=18.25178, lon=-66.254513)
 mapa_puntos = px.scatter_map(df, lat="Lat", lon="Lon", color="Gravedad", size="Gravedad", size_max=5, 
-                             color_continuous_scale=px.colors.sequential.Hot_r,  height=CHART_HEIGHT, zoom=9, center=centro_zoom, 
+                             color_continuous_scale=px.colors.sequential.Hot_r,  height=CHART_HEIGHT, zoom=8, center=centro_zoom, 
                              map_style="carto-darkmatter-nolabels", opacity=0.3)
 col1.plotly_chart(mapa_puntos, use_container_width=True)
 
