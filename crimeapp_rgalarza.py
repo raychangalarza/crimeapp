@@ -74,7 +74,7 @@ if area_policiaca != "Todas las áreas":
     df = df[df["Area"] == area_policiaca]
 
 df = df[df["Crime"].isin(delitos)]
-df = df[df["DOW_Name"].isin(list(dias.values))]
+df = df[df["DOW_Name"].isin(list(dias.values()))]
 
 # Own column for classification between am and pm hours
 df["AM_PM"] = df["Hour"].apply(lambda x: "AM" if x < 12 else "PM") # Experimentndo con lambda
