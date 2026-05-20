@@ -36,6 +36,7 @@ st.divider()
 # Map and chart
 col1, col2 = st.columns([1.5, 1.0], border=True)
 
+CHART_HEIGHT = 500
 # Map bubble colors
 indice_gravedad = {
     "Asesinato": 10,
@@ -53,14 +54,14 @@ df["Gravedad"] = df["Crime"].map(indice_gravedad)
 
 centro_zoom = dict(lat=18.25178, lon=-66.254513)
 mapa_puntos = px.scatter_map(df, lat="Lat", lon="Lon", color="Gravedad", size="Gravedad", size_max=5, 
-                             color_continuous_scale=px.colors.sequential.Hot_r,  height=450, zoom=8, center=centro_zoom, 
+                             color_continuous_scale=px.colors.sequential.Hot_r,  height=CHART_HEIGHT, zoom=8, center=centro_zoom, 
                              map_style="carto-darkmatter-nolabels", opacity=0.3)
 col1.plotly_chart(mapa_puntos, use_container_width=True)
 
 cant = df["Crime"].value_counts().reset_index()
 cant.columns = ["Crimen", "Cantidad"]
 
-distribucion_del = px.bar(cant, x="Cantidad", y="Crimen")
+distribucion_del = px.bar(cant, x="Cantidad", y="Crimen", height=CHART_HEIGHT)
 col2.plotly_chart(distribucion_del)
 
 # Sidebar selectbox and multiselect
