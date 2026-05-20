@@ -21,16 +21,13 @@ st.sidebar.divider()
 
 col1, col2, col3 = st.columns(3)
 
-col1.write("Cantidad de incidentes")
-col1.write(len(df))
+col1.metric("Cantidad de incidentes", len(df))
 
 frecuencia = df["Crime"].count().max()
-col2.write("Delito más frecuente")
-col2.write(str(frecuencia))
+col2.metric("Delito más frecuente", frecuencia)
 
 mas_incidentes = df["Area"].count().max()
-col3.write("Área con mas incidentes")
-col3.write(str(mas_incidentes))
+col3.metric("Área con mas incidentes", mas_incidentes)
 
 
 # Sidebar selectbox and multiselect
