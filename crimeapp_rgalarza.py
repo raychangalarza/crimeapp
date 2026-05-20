@@ -40,8 +40,8 @@ st.sidebar.divider()
 
 delitos = st.sidebar.multiselect(
   "Delitos",
-  df["Crimen"].unique().tolist(),
-  default=df["Crimen"].unique().tolist()
+  df["Delito"].unique().tolist(),
+  default=df["Delito"].unique().tolist()
 )
 
 st.sidebar.divider()
@@ -74,7 +74,7 @@ Universidad de Puerto Rico en Humacao
 if area_policiaca != "Todas las áreas":
     df = df[df["Area"] == area_policiaca]
 
-df = df[df["Crime"].isin(delitos)]
+df = df[df["Delito"].isin(delitos)]
 df = df[df["DOW_Name"].isin(list(dias.values()))]
 
 # Own column for classification between am and pm hours
@@ -96,7 +96,7 @@ if df.empty:
 # Summary text at the top
 col1.metric("Cantidad de incidentes", f"{len(df):,}")
 
-mas_frecuencia = df["Crimen"].value_counts().head(1).index[0]
+mas_frecuencia = df["Delito"].value_counts().head(1).index[0]
 col2.metric("Delito más frecuente", mas_frecuencia)
 
 mas_incidentes = df["Area"].value_counts().head(1).index[0]
@@ -121,14 +121,14 @@ indice_gravedad = {
     "Apropiacion Ilegal": 5.0,
     "Otros":4.0
 }
-df["Gravedad"] = df["Crimen"].map(indice_gravedad) #Usé esto en vez porque aunque, verdaderamente no sé si es así, me pareció más fácil  y quizás eficiente hacerlo fuera de otra función
+df["Gravedad"] = df["Delito"].map(indice_gravedad) #Usé esto en vez porque aunque, verdaderamente no sé si es así, me pareció más fácil  y quizás eficiente hacerlo fuera de otra función
 
 # Map
 centro_zoom = dict(lat=18.25178, lon=-66.254513)
 mapa_puntos = px.scatter_map(df, lat="Lat", lon="Lon", color="Gravedad", size="Gravedad", size_max=5, 
                              color_continuous_scale=px.colors.sequential.Hot_r,  height=CHART_HEIGHT, zoom=7.5, center=centro_zoom, 
                              map_style="carto-darkmatter-nolabels", opacity=0.3, hover_name = "Area", hover_data={
-                                 "Crimen": True,
+                                 "Delito": True,
                                  "Fecha": True,
                                  "Horario": True,
                                  "nombreDiaSemana": True,
