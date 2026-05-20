@@ -19,6 +19,23 @@ df = load_data("crime_processed.csv")
 st.sidebar.image("crimeapp_logo.png")
 st.sidebar.divider()
 
+col1, col2, col3 = st.columns(3)
+
+col1.metric("Cantidad de incidentes", len(df))
+
+frecuencia = df["Crime"].count().max()
+col2.metric(
+    "Delito más frecuente",
+    frecuencia
+)
+
+mas_incidentes = df["Area"].count().max()
+col3.metric(
+    "Área con mas incidentes",
+    mas_incidentes
+)
+
+
 # Sidebar selectbox and multiselect
 area_policiaca = st.sidebar.selectbox(
   "Area Policíaca", 
@@ -81,6 +98,3 @@ def dameIndice(delito):
     return 5.0
   else:
     return 4
-  
-
-
