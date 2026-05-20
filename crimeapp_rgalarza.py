@@ -3,6 +3,7 @@ import streamlit as st
 import plotly.express as px
 
 # Title 
+st.set_page_config(layout="wide")
 st.title("Datos de Crímenes en Puerto Rico 2013-2016")
 st.write("Fuente de datos: Policía de Puerto Rico")
 st.divider()
