@@ -53,10 +53,11 @@ df["indiceGravedad"] = df["Crime"].map(indice_gravedad)
 
 centro_zoom = dict(lat=18.25178, lon=-66.254513)
 mapa_puntos = px.scatter_map(df, lat="Lat", lon="Lon", color="indiceGravedad", size="indiceGravedad", size_max=5, color_continuous_scale=px.colors.sequential.Hot_r,  height=800, zoom=9, center=centro_zoom, map_style="carto-darkmatter-nolabels", opacity=0.3)
-col1.plotly_chart = (mapa_puntos)
+col1.plotly_chart(mapa_puntos)
 
 df["Cantidad"] = df["Crime"].value_counts()
 distribucion_del = px.bar(data_frame=df, x="Cantidad", y="Crime")
+col2.plotly_chart(distribucion_del)
 
 # Sidebar selectbox and multiselect
 area_policiaca = st.sidebar.selectbox(
