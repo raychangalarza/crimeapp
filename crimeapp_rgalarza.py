@@ -60,27 +60,34 @@ Ciencia de Datos\n
 Universidad de Puerto Rico en Humacao
 """)
 
-df_filtered = df.copy()
-
 if area_policiaca != "Todas las áreas":
-    df_filtered = df_filtered[df_filtered["Area"] == area_policiaca]
+    df = df[df["Area"] == area_policiaca]
 
-df_filtered = df_filtered[df_filtered["Crime"].isin(delitos)]
-df_filtered = df_filtered[df_filtered["DOW_Name"].isin(dow)]
+df = df[df["Crime"].isin(delitos)]
+df = df[df["DOW_Name"].isin(dow)]
 
 if am_pm != "Ambas":
-    df_filtered = df_filtered[df_filtered["AM_PM"] == am_pm]
+    df = df[df["AM_PM"] == am_pm]
 
 # Text with summarized metrics
 col1, col2, col3 = st.columns(3)
 
-col1.metric("Cantidad de incidentes", f"{len(df_filtered):,}")
+col1.metric("Cantidad de incidentes", f"{len(df):,}")
 
-mas_frecuencia = df_filtered["Crime"].value_counts().head(1).index[0]
+mas_frecuencia = df["Crime"].value_counts().head(1).index[0]
 col2.metric("Delito más frecuente", mas_frecuencia)
 
-mas_incidentes = df_filtered["Area"].value_counts().head(1).index[0]
+mas_incidentes = df["Area"].value_counts().head(1).index[0]
 col3.metric("Área con mas incidentes", mas_incidentes)
+
+# If empty, show a warning and stop
+if df.empty:
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Cantidad de incidentes", 0)
+    col2.metric("Delito más frecuente", "N/A")
+    col3.metric("Área con mas incidentes", "N/A")
+    st.warning("No hay datos con los filtros seleccionados.")
+    st.stop()
 
 st.divider()
 
@@ -101,16 +108,17 @@ indice_gravedad = {
     "Apropiacion Ilegal": 5.0,
     "Otros":4.0
 }
-df_filtered["Gravedad"] = df_filtered["Crime"].map(indice_gravedad)
+df["Gravedad"] = df["Crime"].map(indice_gravedad)
 
 centro_zoom = dict(lat=18.25178, lon=-66.254513)
-mapa_puntos = px.scatter_map(df_filtered, lat="Lat", lon="Lon", color="Gravedad", size="Gravedad", size_max=5, 
+mapa_puntos = px.scatter_map(df, lat="Lat", lon="Lon", color="Gravedad", size="Gravedad", size_max=5, 
                              color_continuous_scale=px.colors.sequential.Hot_r,  height=CHART_HEIGHT, zoom=9, center=centro_zoom, 
                              map_style="carto-darkmatter-nolabels", opacity=0.3)
 col1.plotly_chart(mapa_puntos, use_container_width=True)
 
-cant = df_filtered["Crime"].value_counts().reset_index()
+cant = df["Crime"].value_counts().reset_index()
 cant.columns = ["Crimen", "Cantidad"]
+cant = cant.sort_values("Cantidad", ascending=True)
 
-distribucion_del = px.bar(cant, x="Cantidad", y="Crimen", height=CHART_HEIGHT)
-col2.plotly_chart(distribucion_del)
+distribucion_del = px.bar(cant, x="Cantidad", y="Crimen", height=CHART_HEIGHT, title="Distribución de Delitos\nÁrea Policiaca: Todas las áreas")
+col2.plotly_chart(distribucion_del, use_container_width=True)
