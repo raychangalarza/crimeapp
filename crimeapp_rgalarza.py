@@ -18,7 +18,7 @@ df = load_data("crime_processed.csv")
 df.columns = ["Fecha", "Horario", "CrimeCode", "Delito", "Lat", "Lon", "Area", "Año", "Mes", "nombreMes", "Dia", "Dia_Semana", "nombreDiaSemana", "DiaAño", "Hora", "Min"]
 
 # Traduccion de los dias
-df.replace({"Sunday":  "Domingo",
+df["nombreDiaSemana"] = df["nombreDiaSemana"].replace({"Sunday":  "Domingo",
         "Monday": "Lunes",
         "Tuesday": "Martes",
         "Wednesday": "Miércoles",
@@ -140,9 +140,9 @@ mapa_puntos = px.scatter_map(df, lat="Lat", lon="Lon", color="Gravedad", size="G
 col1.plotly_chart(mapa_puntos, use_container_width=True)
 
 # Own dataframe for bar chart
-cant = df["Crimen"].value_counts().reset_index()
+cant = df["Delito"].value_counts().reset_index()
 cant.columns = ["Crimen", "Cantidad"]
 cant = cant.sort_values("Cantidad", ascending=True)
 # En el pdf dice histograma pero en el ejemplo es un bar, me hizo mas sentido como bar
-distribucion_del = px.bar(cant, x="Cantidad", y="Crimen", height=CHART_HEIGHT, title="Distribución de Delitos<br>Área Policiaca: Todas las áreas")
+distribucion_del = px.bar(cant, x="Cantidad", y="Crimen", height=CHART_HEIGHT, title=f"Distribución de Delitos<br>Área Policiaca: {area_policiaca}")
 col2.plotly_chart(distribucion_del, use_container_width=True)
