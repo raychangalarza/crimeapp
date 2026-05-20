@@ -47,8 +47,8 @@ st.sidebar.divider()
 
 dow = st.sidebar.multiselect(
   "Día de la Semana",
-  df["DOW_Name"].unique().tolist(),
-  default=df["DOW_Name"].unique().tolist()
+  list(dias),
+  default=list(dias)
 )
 
 st.sidebar.divider()
@@ -74,7 +74,7 @@ if area_policiaca != "Todas las áreas":
     df = df[df["Area"] == area_policiaca]
 
 df = df[df["Crime"].isin(delitos)]
-df = df[df["DOW_Name"].isin(dow)]
+df = df[df["DOW_Name"].isin(list(dias.values))]
 
 # Own column for classification between am and pm hours
 df["AM_PM"] = df["Hour"].apply(lambda x: "AM" if x < 12 else "PM") # Experimentndo con lambda
