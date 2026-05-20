@@ -66,6 +66,7 @@ if area_policiaca != "Todas las áreas":
 df = df[df["Crime"].isin(delitos)]
 df = df[df["DOW_Name"].isin(dow)]
 
+df["AM_PM"] = df["Hour"].apply(lambda x: "AM" if x < 12 else "PM")
 if am_pm != "Ambas":
     df = df[df["AM_PM"] == am_pm]
 
